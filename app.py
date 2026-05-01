@@ -17,8 +17,8 @@ from models.enhanced_classic_eoq import EnhancedClassicEOQ, EnhancedPOQ, Enhance
 from reports.pdf_generator import EOQPDFGenerator
 
 
-st.set_page_config(page_title="Multi-Item EOQ System",
-                   page_icon="📦", layout="wide")
+st.set_page_config(page_title="Inventory Command Center",
+                   page_icon="📦", layout="wide", initial_sidebar_state="expanded")
 
 
 ANNUAL_COST_KEYS = {
@@ -46,11 +46,120 @@ def annual_cost_keys(cost_breakdown: dict):
 
 
 # ─────────────────────────────────────────────────────────────────────────────
+# Visual design system
+# ─────────────────────────────────────────────────────────────────────────────
+DESIGN_CSS = """
+<style>
+:root {
+  --ink: #0f172a;
+  --muted: #64748b;
+  --panel: rgba(255, 255, 255, 0.86);
+  --line: rgba(15, 23, 42, 0.10);
+  --brand: #2563eb;
+  --brand-2: #7c3aed;
+  --accent: #14b8a6;
+  --shadow: 0 20px 60px rgba(15, 23, 42, 0.10);
+  --shadow-soft: 0 10px 28px rgba(15, 23, 42, 0.08);
+}
+.stApp {
+  background:
+    radial-gradient(circle at 10% 0%, rgba(37, 99, 235, 0.18), transparent 30%),
+    radial-gradient(circle at 92% 8%, rgba(20, 184, 166, 0.16), transparent 32%),
+    linear-gradient(180deg, #f8fafc 0%, #eef2ff 42%, #f8fafc 100%);
+  color: var(--ink);
+}
+.block-container { padding-top: 1.4rem; padding-bottom: 5rem; max-width: 1450px; }
+[data-testid="stSidebar"] { background: linear-gradient(180deg, #0f172a 0%, #111827 52%, #172554 100%); border-right: 1px solid rgba(255,255,255,0.08); }
+[data-testid="stSidebar"] * { color: rgba(255,255,255,0.92) !important; }
+.hero-shell { position: relative; overflow: hidden; padding: 30px 34px; border-radius: 30px; background: linear-gradient(135deg, rgba(15, 23, 42, 0.96), rgba(30, 41, 59, 0.92)); box-shadow: var(--shadow); border: 1px solid rgba(255,255,255,0.16); margin-bottom: 1.3rem; }
+.hero-shell:after { content: ""; position: absolute; right: -80px; top: -120px; width: 360px; height: 360px; border-radius: 50%; background: linear-gradient(135deg, rgba(37,99,235,0.42), rgba(20,184,166,0.28)); filter: blur(4px); }
+.hero-kicker { position: relative; z-index: 2; display: inline-flex; gap: 10px; align-items: center; padding: 7px 12px; border-radius: 999px; background: rgba(255, 255, 255, 0.10); border: 1px solid rgba(255, 255, 255, 0.18); color: #bfdbfe; font-size: 0.78rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; }
+.hero-title { position: relative; z-index: 2; margin: 14px 0 8px 0; font-size: clamp(2.1rem, 4vw, 4.1rem); line-height: 0.98; color: white; letter-spacing: -0.055em; font-weight: 900; }
+.hero-copy { position: relative; z-index: 2; max-width: 780px; color: #cbd5e1; font-size: 1.04rem; line-height: 1.65; margin-bottom: 0; }
+.hero-grid { position: relative; z-index: 2; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 22px; max-width: 840px; }
+.hero-chip { padding: 13px 15px; border-radius: 18px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.14); color: #e2e8f0; font-size: 0.88rem; }
+.hero-chip b { color: #fff; display: block; margin-bottom: 2px; }
+.section-kicker { display: inline-flex; align-items: center; gap: 9px; color: var(--brand); font-weight: 900; font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; margin-top: 0.45rem; }
+.section-title { font-size: 1.55rem; font-weight: 900; letter-spacing: -0.04em; color: var(--ink); margin: 0.15rem 0 0.2rem; }
+.section-copy { color: var(--muted); font-size: 0.95rem; margin: 0 0 0.9rem; }
+.metric-card { border-radius: 22px; padding: 18px 18px 16px; background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(248,250,252,0.92)); border: 1px solid rgba(15,23,42,0.08); box-shadow: 0 12px 30px rgba(15,23,42,0.07); min-height: 118px; }
+.metric-label { color: var(--muted); font-weight: 800; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.07em; }
+.metric-value { margin-top: 8px; color: var(--ink); font-weight: 900; font-size: 1.7rem; letter-spacing: -0.045em; line-height: 1.05; }
+.metric-detail { margin-top: 8px; color: #475569; font-size: 0.86rem; }
+.result-banner { padding: 20px 22px; border-radius: 24px; background: linear-gradient(135deg, rgba(37,99,235,0.12), rgba(20,184,166,0.10)); border: 1px solid rgba(37,99,235,0.14); margin: 1.1rem 0 0.8rem; }
+.result-title { color: var(--ink); font-size: 1.35rem; font-weight: 900; letter-spacing: -0.035em; margin: 0; }
+.result-meta { color: var(--muted); font-size: 0.9rem; margin-top: 5px; }
+.badge { display: inline-flex; align-items: center; padding: 6px 11px; border-radius: 999px; font-size: 0.76rem; font-weight: 900; letter-spacing: 0.04em; text-transform: uppercase; background: rgba(37,99,235,0.10); color: #1d4ed8; border: 1px solid rgba(37,99,235,0.16); }
+.badge.teal { background: rgba(20,184,166,0.12); color: #0f766e; border-color: rgba(20,184,166,0.18); }
+.badge.purple { background: rgba(124,58,237,0.11); color: #6d28d9; border-color: rgba(124,58,237,0.16); }
+.sidebar-brand { padding: 20px 8px 16px; border-bottom: 1px solid rgba(255,255,255,0.12); margin-bottom: 18px; }
+.sidebar-brand h2 { color: #fff !important; margin: 0; font-size: 1.25rem; letter-spacing: -0.03em; }
+.sidebar-brand p { color: rgba(226,232,240,0.72) !important; font-size: 0.82rem; line-height: 1.45; margin-top: 6px; }
+.workflow-step { padding: 11px 12px; border-radius: 16px; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.10); margin: 8px 0; font-size: 0.86rem; }
+[data-testid="stMetric"] { background: rgba(255,255,255,0.70); border: 1px solid rgba(15,23,42,0.08); padding: 14px 16px; border-radius: 18px; box-shadow: 0 8px 22px rgba(15,23,42,0.06); }
+[data-testid="stMetricLabel"] p { font-size: 0.78rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; font-weight: 800; }
+[data-testid="stMetricValue"] div { color: var(--ink); font-weight: 900; letter-spacing: -0.04em; }
+.stButton > button, .stDownloadButton > button { border: none !important; border-radius: 999px !important; padding: 0.72rem 1.2rem !important; background: linear-gradient(135deg, #2563eb, #14b8a6) !important; color: white !important; font-weight: 900 !important; box-shadow: 0 14px 30px rgba(37, 99, 235, 0.25) !important; }
+.stButton > button:hover, .stDownloadButton > button:hover { transform: translateY(-1px); box-shadow: 0 18px 36px rgba(37, 99, 235, 0.30) !important; }
+.stTabs [data-baseweb="tab-list"] { gap: 8px; background: rgba(255,255,255,0.58); padding: 8px; border-radius: 18px; border: 1px solid rgba(15,23,42,0.08); }
+.stTabs [data-baseweb="tab"] { border-radius: 13px; padding: 10px 16px; font-weight: 800; }
+.stTabs [aria-selected="true"] { background: #0f172a !important; color: white !important; }
+hr { border-color: rgba(15,23,42,0.08); }
+@media (max-width: 900px) { .hero-grid { grid-template-columns: 1fr; } .hero-shell { padding: 24px; } }
+</style>
+"""
+
+
+def inject_design_system():
+    st.markdown(DESIGN_CSS, unsafe_allow_html=True)
+
+
+def hero():
+    st.markdown("""
+    <div class="hero-shell">
+      <div class="hero-kicker">Inventory Intelligence Suite</div>
+      <div class="hero-title">EOQ Command Center</div>
+      <p class="hero-copy">A boardroom-grade workspace for order quantity decisions, cost architecture, sensitivity diagnostics, and action-ready inventory recommendations.</p>
+      <div class="hero-grid">
+        <div class="hero-chip"><b>01 · Configure</b> Build item-level demand and cost architecture.</div>
+        <div class="hero-chip"><b>02 · Diagnose</b> Compare EOQ, sensitivity, and scenario behavior.</div>
+        <div class="hero-chip"><b>03 · Act</b> Export recommendations and executive PDF reports.</div>
+      </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+
+def section_header(kicker: str, title: str, copy: str = ""):
+    st.markdown(f"""
+    <div class="section-kicker">{kicker}</div>
+    <div class="section-title">{title}</div>
+    <div class="section-copy">{copy}</div>
+    """, unsafe_allow_html=True)
+
+
+def metric_card(label: str, value: str, detail: str = ""):
+    st.markdown(f"""
+    <div class="metric-card">
+      <div class="metric-label">{label}</div>
+      <div class="metric-value">{value}</div>
+      <div class="metric-detail">{detail}</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+
+def model_badge(model_type: str) -> str:
+    lower = model_type.lower()
+    css = "purple" if "production" in lower else "teal" if "stochastic" in lower else ""
+    return f'<span class="badge {css}">{model_type}</span>'
+
+# ─────────────────────────────────────────────────────────────────────────────
 # UI helpers
 # ─────────────────────────────────────────────────────────────────────────────
 
+
 def holding_cost_ui(prefix: str, unit_cost: float):
-    st.markdown("#### 🏪 Holding Cost Components")
+    section_header("Cost architecture", "Holding cost",
+                   "Choose a simple carrying charge or build it from capital, storage, insurance, risk, and handling components.")
     mode = st.radio(
         "Input Mode",
         ["Component-Based (Detailed)", "Single Value (Simple)"],
@@ -116,7 +225,8 @@ def holding_cost_ui(prefix: str, unit_cost: float):
 
 
 def ordering_cost_ui(prefix: str):
-    st.markdown("#### 🚚 Ordering Cost Components")
+    section_header("Procurement economics", "Ordering cost",
+                   "Separate fixed setup/order costs from variable landed costs so the EOQ math stays clean.")
     mode = st.radio(
         "Input Mode",
         ["Component-Based (Detailed)", "Single Value (Simple)"],
@@ -171,7 +281,8 @@ def ordering_cost_ui(prefix: str):
 
 
 def production_cost_ui(prefix: str):
-    st.markdown("#### 🏭 Production Cost Components")
+    section_header("Production economics", "Production cost",
+                   "Model internal production with material, labor, machine, energy, overhead, quality, scrap, tooling, and setup costs.")
     mode = st.radio(
         "Input Mode",
         ["Component-Based (Detailed)", "Single Value (Simple)"],
@@ -323,59 +434,94 @@ def run_full_calculations(results, pct_range=50):
 
 
 def render_basic_result(cfg, result):
-    with st.expander(
-        f"📦 {result.item_name} | {result.model_type} | EOQ: {result.eoq} units | Cost: ${result.total_cost:,.2f}",
-        expanded=True,
-    ):
-        col1, col2, col3, col4 = st.columns(4)
-        col1.metric("EOQ", f"{result.eoq} units")
-        col2.metric("Total Annual Cost", f"${result.total_cost:,.2f}")
-        col3.metric("Orders/Year", result.order_frequency)
-        col4.metric("Cycle Time", f"{result.cycle_time} days")
+    st.markdown(
+        f"""
+        <div class="result-banner">
+          <div style="display:flex; justify-content:space-between; gap:16px; align-items:flex-start; flex-wrap:wrap;">
+            <div>
+              <p class="result-title">{result.item_name} <span style="color:#64748b; font-weight:800;">({result.item_id})</span></p>
+              <div class="result-meta">{model_badge(result.model_type)} &nbsp; Lead time: {cfg.get('lead_time', '—')} days &nbsp; Demand: {cfg.get('demand', 0):,.0f} units/year</div>
+            </div>
+            <div class="badge">Optimal Q · {result.eoq:,.0f}</div>
+          </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
+    col1, col2, col3, col4 = st.columns(4)
+    with col1:
+        metric_card("Economic order quantity",
+                    f"{result.eoq:,.0f}", "units per replenishment")
+    with col2:
+        metric_card("Total annual cost",
+                    f"${result.total_cost:,.0f}", "purchase + ordering + holding")
+    with col3:
+        metric_card("Orders per year",
+                    f"{result.order_frequency:,.1f}", "replenishment cadence")
+    with col4:
+        metric_card(
+            "Cycle time", f"{result.cycle_time:,.0f}d", "average days per cycle")
+
+    with st.expander("Cost architecture and operational details", expanded=False):
         col5, col6, col7 = st.columns(3)
-        col5.metric("Holding Cost/Unit/Yr",
+        col5.metric("Holding Cost / Unit / Year",
                     f"${result.holding_cost_per_unit:.4f}")
-        col6.metric("Order/Setup Cost",
+        col6.metric("Order / Setup Cost",
                     f"${result.ordering_cost_per_order:.2f}")
         if result.reorder_point is not None:
             col7.metric("Reorder Point", f"{result.reorder_point} units")
+        elif result.safety_stock is not None:
+            col7.metric("Safety Stock", f"{result.safety_stock} units")
 
         cost_breakdown = result.cost_breakdown or {}
         cost_keys = annual_cost_keys(cost_breakdown)
         if cost_keys:
-            fig_pie = px.pie(values=[cost_breakdown[k] for k in cost_keys], names=[k.replace(
-                "_", " ").title() for k in cost_keys], title=f"Cost Breakdown - {result.item_name}")
+            fig_pie = px.pie(
+                values=[cost_breakdown[k] for k in cost_keys],
+                names=[k.replace("_", " ").title() for k in cost_keys],
+                title=f"Annual Cost Composition — {result.item_name}",
+                hole=0.48,
+            )
+            fig_pie.update_layout(margin=dict(
+                l=10, r=10, t=50, b=10), legend_title_text="")
             st.plotly_chart(fig_pie, use_container_width=True)
 
-        if result.holding_breakdown and "total_holding_cost" in result.holding_breakdown:
-            st.markdown("**Holding Cost Breakdown:**")
-            hc_df = pd.DataFrame([
-                {"Component": k.replace("_", " ").title(),
-                 "Cost ($/unit/year)": v}
-                for k, v in result.holding_breakdown.items()
-                if isinstance(v, Number) and k != "total_holding_cost"
-            ])
-            st.dataframe(hc_df, hide_index=True, use_container_width=True)
-
-        if result.ordering_breakdown:
-            st.markdown("**Ordering Cost Breakdown:**")
-            oc_df = pd.DataFrame([
-                {"Component": k.replace("_", " ").title(), "Value": v}
-                for k, v in result.ordering_breakdown.items()
-                if k != "source"
-            ])
-            st.dataframe(oc_df, hide_index=True, use_container_width=True)
-
+        detail_tabs = st.tabs(["Holding", "Ordering", "Production"]
+                              if result.production_breakdown else ["Holding", "Ordering"])
+        with detail_tabs[0]:
+            if result.holding_breakdown and "total_holding_cost" in result.holding_breakdown:
+                hc_df = pd.DataFrame([
+                    {"Component": k.replace(
+                        "_", " ").title(), "Cost ($/unit/year)": v}
+                    for k, v in result.holding_breakdown.items()
+                    if isinstance(v, Number) and k != "total_holding_cost"
+                ])
+                st.dataframe(hc_df, hide_index=True, use_container_width=True)
+            else:
+                st.info(
+                    "No component-level holding breakdown available for this item.")
+        with detail_tabs[1]:
+            if result.ordering_breakdown:
+                oc_df = pd.DataFrame([
+                    {"Component": k.replace("_", " ").title(), "Value": v}
+                    for k, v in result.ordering_breakdown.items()
+                    if k != "source"
+                ])
+                st.dataframe(oc_df, hide_index=True, use_container_width=True)
+            else:
+                st.info(
+                    "No component-level ordering breakdown available for this item.")
         if result.production_breakdown:
-            st.markdown("**Production Cost Breakdown:**")
-            pc_df = pd.DataFrame([{"Component": k.replace("_", " ").title(
-            ), "Value": v} for k, v in result.production_breakdown.items()])
-            st.dataframe(pc_df, hide_index=True, use_container_width=True)
+            with detail_tabs[2]:
+                pc_df = pd.DataFrame([{"Component": k.replace("_", " ").title(
+                ), "Value": v} for k, v in result.production_breakdown.items()])
+                st.dataframe(pc_df, hide_index=True, use_container_width=True)
 
 
 def render_sensitivity_section(cfg, result):
-    st.header("📉 Sensitivity Analysis")
+    section_header("Diagnostic lab", "Sensitivity analysis",
+                   "Stress-test demand, cost, and unit economics to understand which assumptions drive financial exposure.")
     col1, col2, col3 = st.columns(3)
     with col1:
         pct_range = st.slider("Parameter Variation Range (±%)",
@@ -417,16 +563,19 @@ def render_sensitivity_section(cfg, result):
         Parameters are ranked by cost elasticity because that is usually the business-impact view.
         """)
 
-    st.subheader("🌪️ Tornado Chart — Parameter Impact")
+    section_header("Impact range", "Tornado chart",
+                   "Visualizes which parameters create the widest swing in annual cost.")
     st.plotly_chart(SensitivityVisualizer.plot_tornado_chart(
         tornado_data, result.total_cost, result.item_name), use_container_width=True)
 
-    st.subheader("📈 Sensitivity Curves")
+    section_header("Response curves", "Sensitivity curves",
+                   "See how EOQ and total cost respond as each assumption moves away from baseline.")
     st.plotly_chart(SensitivityVisualizer.plot_sensitivity_curves(
         ranked, result.item_name), use_container_width=True)
 
     if show_two_way:
-        st.subheader("🔁 Two-Way Sensitivity Analysis")
+        section_header("Interaction view", "Two-way sensitivity",
+                       "Explore how pairs of assumptions interact across the EOQ and total-cost surface.")
         col1, col2 = st.columns(2)
         options = ["demand", "ordering_cost", "holding_cost", "unit_cost"]
         with col1:
@@ -462,7 +611,8 @@ def render_sensitivity_section(cfg, result):
 
 
 def render_optimization_section(cfg, result):
-    st.header("💡 Cost Optimization Suggestions")
+    section_header("Savings roadmap", "Optimization opportunities",
+                   "Prioritized recommendations with implementation guidance and overlap-aware savings estimates.")
     optimizer = CostOptimizer(cfg, result)
     suggestions = optimizer.generate_all_suggestions()
     scenarios_df = optimizer.generate_scenarios()
@@ -480,11 +630,13 @@ def render_optimization_section(cfg, result):
         st.caption(savings_summary.get(
             "overlap_note", "Gross identified savings may include overlapping recommendations and should not be treated as fully additive."))
 
-    st.subheader("🗺️ Optimization Opportunity Map")
+    section_header("Opportunity map", "Savings versus difficulty",
+                   "Bubble position shows estimated impact; bubble size reflects implementation difficulty.")
     st.plotly_chart(SensitivityVisualizer.plot_optimization_summary(
         suggestions, result.item_name), use_container_width=True)
 
-    st.subheader("📋 Detailed Recommendations")
+    section_header("Action detail", "Recommendation cards",
+                   "Filter and inspect each opportunity before exporting the roadmap.")
     if not suggestions:
         st.info("No specific optimization opportunities found for this item.")
     else:
@@ -519,7 +671,8 @@ def render_optimization_section(cfg, result):
                     st.dataframe(pd.DataFrame([{"KPI": k, "Impact": v} for k, v in s.kpi_impact.items(
                     )]), hide_index=True, use_container_width=True)
 
-    st.subheader("🔮 What-If Scenario Analysis")
+    section_header("Scenario desk", "What-if scenarios",
+                   "Compare targeted initiatives against the current baseline.")
     st.plotly_chart(SensitivityVisualizer.plot_scenarios(
         scenarios_df, result.item_name), use_container_width=True)
     st.dataframe(scenarios_df, hide_index=True, use_container_width=True)
@@ -545,7 +698,8 @@ def render_optimization_section(cfg, result):
 
 
 def render_pdf_download(results, summary_df):
-    st.header("📄 PDF Report Generator")
+    section_header("Report studio", "Executive PDF export",
+                   "Generate a polished PDF packet with all model outputs, charts, recommendations, and appendices.")
     with st.expander("⚙️ Report Settings", expanded=True):
         col1, col2 = st.columns(2)
         with col1:
@@ -601,33 +755,61 @@ def render_pdf_download(results, summary_df):
 
 
 def render_full_results(results):
-    st.header("📊 Results")
+    section_header("Portfolio dashboard", "Executive results",
+                   "Scan optimal quantities, annual cost, replenishment cadence, and risk buffers across the modeled inventory portfolio.")
+    summary_df = build_summary_df(results)
+    total_cost = summary_df["Total Annual Cost"].sum()
+    avg_cycle = summary_df["Cycle Time (days)"].mean()
+    highest = summary_df.sort_values(
+        "Total Annual Cost", ascending=False).iloc[0]
+
+    col_a, col_b, col_c, col_d = st.columns(4)
+    with col_a:
+        metric_card("Portfolio annual cost",
+                    f"${total_cost:,.0f}", f"{len(results)} item(s) modeled")
+    with col_b:
+        metric_card("Average cycle",
+                    f"{avg_cycle:,.0f}d", "mean replenishment rhythm")
+    with col_c:
+        metric_card("Highest cost item", str(
+            highest["Item Name"]), f"${highest['Total Annual Cost']:,.0f} annual cost")
+    with col_d:
+        metric_card(
+            "Models active", f"{summary_df['Model'].nunique()}", "EOQ variants represented")
+
     for cfg, result in results:
         render_basic_result(cfg, result)
 
-    st.subheader("📈 Summary Comparison")
-    summary_df = build_summary_df(results)
+    section_header("Portfolio comparison", "Cost and replenishment summary",
+                   "A compact cross-item view for comparing annual cost, order frequency, cycle time, and control points.")
     st.dataframe(summary_df, hide_index=True, use_container_width=True)
-    st.plotly_chart(px.bar(summary_df, x="Item Name", y="Total Annual Cost", color="Model",
-                    barmode="group", title="Total Annual Cost Comparison"), use_container_width=True)
 
-    fig2 = go.Figure()
-    fig2.add_trace(go.Bar(name="Holding ($/unit/year)",
-                   x=summary_df["Item Name"], y=summary_df["Holding Cost/Unit/Yr"]))
-    fig2.add_trace(go.Bar(name="Ordering ($/order)",
-                   x=summary_df["Item Name"], y=summary_df["Ordering Cost/Order"]))
-    fig2.update_layout(
-        barmode="group", title="Holding vs Ordering Cost Comparison")
-    st.plotly_chart(fig2, use_container_width=True)
+    chart_tab, cost_tab = st.tabs(["Annual cost", "Cost drivers"])
+    with chart_tab:
+        fig = px.bar(summary_df, x="Item Name", y="Total Annual Cost",
+                     color="Model", barmode="group", title="Total Annual Cost Comparison")
+        fig.update_layout(margin=dict(l=20, r=20, t=60, b=20),
+                          legend_title_text="")
+        st.plotly_chart(fig, use_container_width=True)
+    with cost_tab:
+        fig2 = go.Figure()
+        fig2.add_trace(go.Bar(name="Holding ($/unit/year)",
+                       x=summary_df["Item Name"], y=summary_df["Holding Cost/Unit/Yr"]))
+        fig2.add_trace(go.Bar(name="Ordering ($/order)",
+                       x=summary_df["Item Name"], y=summary_df["Ordering Cost/Order"]))
+        fig2.update_layout(barmode="group", title="Holding vs Ordering Cost Comparison", margin=dict(
+            l=20, r=20, t=60, b=20))
+        st.plotly_chart(fig2, use_container_width=True)
 
     st.download_button("⬇️ Download Results CSV", summary_df.to_csv(
         index=False).encode("utf-8"), "eoq_results.csv", "text/csv")
 
-    result_tabs = st.tabs([f"📦 {r.item_name}" for _, r in results])
+    section_header("Deep dive", "Item diagnostics",
+                   "Use the tabs below to inspect sensitivity, scenario behavior, and savings roadmaps for each item.")
+    result_tabs = st.tabs([f"{r.item_name}" for _, r in results])
     for tab, (cfg, result) in zip(result_tabs, results):
         with tab:
-            analysis_tabs = st.tabs(
-                ["📉 Sensitivity Analysis", "💡 Optimization Suggestions"])
+            analysis_tabs = st.tabs(["Sensitivity lab", "Savings roadmap"])
             with analysis_tabs[0]:
                 render_sensitivity_section(cfg, result)
             with analysis_tabs[1]:
@@ -640,16 +822,28 @@ def render_full_results(results):
 # Main app
 # ─────────────────────────────────────────────────────────────────────────────
 
-st.title("📦 Multi-Item EOQ System with Variable Cost Control")
-st.sidebar.header("⚙️ Configuration")
-num_items = st.sidebar.slider("Number of Items", 1, 8, 2)
+inject_design_system()
+hero()
+
+with st.sidebar:
+    st.markdown("""
+    <div class="sidebar-brand">
+      <h2>Inventory Studio</h2>
+      <p>Configure models, run diagnostics, and export decision-ready reports.</p>
+    </div>
+    <div class="workflow-step"><b>1</b> · Select portfolio size</div>
+    <div class="workflow-step"><b>2</b> · Configure demand + costs</div>
+    <div class="workflow-step"><b>3</b> · Run EOQ analysis</div>
+    """, unsafe_allow_html=True)
+    num_items = st.slider("Portfolio items", 1, 8, 2)
 
 all_items_config = []
-tabs = st.tabs([f"📦 Item {i + 1}" for i in range(num_items)])
+tabs = st.tabs([f"Item {i + 1}" for i in range(num_items)])
 
 for i, tab in enumerate(tabs):
     with tab:
-        st.subheader(f"Item {i + 1} Configuration")
+        section_header(
+            "Configuration", f"Item {i + 1}", "Define item identity, demand behavior, service targets, and cost architecture.")
         col1, col2 = st.columns(2)
         with col1:
             item_id = st.text_input(
@@ -673,6 +867,8 @@ for i, tab in enumerate(tabs):
                 "Current Order Qty (optional)", 0.0, 1000000.0, 0.0, key=f"coq_{i}")
 
         st.divider()
+        section_header("Model setup", "Cost model",
+                       "Complete the cost inputs for the selected model type.")
         if item_type == "Purchased (Classic EOQ)":
             unit_cost = st.number_input(
                 "Unit Purchase Cost ($)", 0.01, 10000.0, 10.0, key=f"uc_{i}")
@@ -722,7 +918,9 @@ for i, tab in enumerate(tabs):
                 "hc_components": hc_components, "hc_override": hc_override, "oc_components": oc_components, "oc_override": oc_override,
             })
 
-if st.button("🚀 Run EOQ Analysis", type="primary"):
+section_header("Run", "Launch analysis",
+               "Calculate enhanced EOQ outputs and unlock diagnostics, savings recommendations, and PDF export.")
+if st.button("Run EOQ Analysis", type="primary"):
     results, errors = [], []
     for cfg in all_items_config:
         try:
@@ -734,7 +932,8 @@ if st.button("🚀 Run EOQ Analysis", type="primary"):
             st.error(err)
     if results:
         st.session_state["eoq_results"] = results
-        st.success(f"Analysis completed for {len(results)} item(s).")
+        st.success(
+            f"Analysis completed for {len(results)} item(s). Scroll down for the executive dashboard.")
 
 if "eoq_results" in st.session_state:
     render_full_results(st.session_state["eoq_results"])
