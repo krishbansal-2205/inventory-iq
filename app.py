@@ -18,7 +18,7 @@ from reports.pdf_generator import EOQPDFGenerator
 
 
 st.set_page_config(page_title="Inventory Command Center",
-                   page_icon="📦", layout="wide", initial_sidebar_state="expanded")
+                   layout="wide", initial_sidebar_state="expanded")
 
 
 ANNUAL_COST_KEYS = {
@@ -67,13 +67,11 @@ DESIGN_CSS = """
 .block-container { padding-top: 2rem; padding-bottom: 5rem; max-width: 1400px; }
 
 /* Hero Section */
-.hero-shell { position: relative; overflow: hidden; padding: 3rem; border-radius: 1.25rem; background: linear-gradient(135deg, #0f172a, #1e3a8a, #312e81); box-shadow: var(--shadow); margin-bottom: 2rem; color: white; }
-.hero-kicker { display: inline-flex; gap: 8px; align-items: center; padding: 0.35rem 0.85rem; border-radius: 999px; background: rgba(255, 255, 255, 0.15); font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #bae6fd; border: 1px solid rgba(255,255,255,0.2); }
-.hero-title { margin: 1.25rem 0 0.75rem 0; font-size: 3rem; font-weight: 900; line-height: 1.15; letter-spacing: -0.03em; color: #ffffff; }
-.hero-copy { font-size: 1.15rem; color: #e2e8f0; max-width: 50rem; line-height: 1.6; margin-bottom: 0; font-weight: 400; }
-.hero-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; margin-top: 2.5rem; }
-.hero-chip { padding: 1.5rem; border-radius: 1rem; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); font-size: 0.9rem; color: #cbd5e1; backdrop-filter: blur(10px); }
-.hero-chip b { color: white; display: block; margin-bottom: 0.35rem; font-size: 1.1rem; font-weight: 700; }
+.hero-shell { position: relative; overflow: hidden; padding: 4rem 2rem; text-align: center; border-radius: 1.25rem; background: linear-gradient(135deg, #0f172a, #1e3a8a, #312e81); box-shadow: var(--shadow); margin-bottom: 2rem; }
+.hero-shell, .hero-shell * { color: #ffffff !important; }
+.hero-kicker { display: inline-block; padding: 0.35rem 0.85rem; border-radius: 999px; background: rgba(255, 255, 255, 0.15); font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; border: 1px solid rgba(255,255,255,0.2); }
+.hero-title { margin: 1.5rem 0 1rem 0; font-size: 3.5rem; font-weight: 900; line-height: 1.1; letter-spacing: -0.03em; }
+.hero-copy { font-size: 1.25rem; max-width: 48rem; line-height: 1.6; margin: 0 auto; font-weight: 400; opacity: 0.9; }
 
 /* Sections */
 .section-kicker { color: var(--brand); font-weight: 800; font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.05em; }
@@ -95,7 +93,7 @@ DESIGN_CSS = """
 .badge.purple { background: #faf5ff; color: #6b21a8; border-color: #e9d5ff; }
 
 /* Streamlit Override: Contrast & Visibility */
-.stMarkdown, .stMarkdown p, [data-testid="stMarkdownContainer"] p { color: var(--ink) !important; }
+.stMarkdown, .stMarkdown p, [data-testid="stMarkdownContainer"] p { color: var(--ink); }
 [data-testid="stWidgetLabel"] p, [data-testid="stWidgetLabel"] label { color: #1f2937 !important; font-weight: 600 !important; font-size: 0.95rem !important; }
 input, textarea, [data-baseweb="input"] input { color: #111827 !important; background-color: #ffffff !important; -webkit-text-fill-color: #111827 !important; }
 [data-baseweb="select"] > div, [data-baseweb="select"] span { color: #111827 !important; background-color: #ffffff !important; }
@@ -111,6 +109,8 @@ input, textarea, [data-baseweb="input"] input { color: #111827 !important; backg
 .stButton > button, .stDownloadButton > button { background: var(--brand) !important; color: white !important; border: none !important; border-radius: 0.5rem !important; padding: 0.6rem 1.25rem !important; font-weight: 600 !important; box-shadow: 0 4px 6px rgba(37, 99, 235, 0.2) !important; transition: all 0.2s; }
 .stButton > button:hover, .stDownloadButton > button:hover { background: #1d4ed8 !important; transform: translateY(-1px); box-shadow: 0 6px 8px rgba(37, 99, 235, 0.3) !important; }
 hr { border-color: var(--line) !important; }
+[data-testid="stExpander"] { background: white !important; border: 1px solid var(--line) !important; border-radius: 0.5rem !important; }
+[data-testid="stExpander"] summary, [data-testid="stExpander"] summary p, [data-testid="stExpander"] summary span { color: #111827 !important; font-weight: 600 !important; }
 </style>
 """
 
@@ -122,23 +122,9 @@ def inject_design_system():
 def hero():
     st.markdown("""
     <div class="hero-shell">
-      <div class="hero-kicker">✦ Multi-Model Inventory Optimization</div>
-      <div class="hero-title">Supply Chain <br/>Command Center</div>
+      <div class="hero-kicker">Multi-Model Inventory Optimization</div>
+      <div class="hero-title">Supply Chain Command Center</div>
       <p class="hero-copy">A comprehensive workspace for evaluating Economic Order Quantity (EOQ), conducting sensitivity analysis, and generating actionable procurement strategies across your entire product portfolio.</p>
-      <div class="hero-grid">
-        <div class="hero-chip">
-            <div style="font-size: 1.75rem; margin-bottom: 0.75rem;">⚙️</div>
-            <b>Model Portfolio</b><br/>Configure parameters for Classic EOQ, POQ, and Stochastic inventory models.
-        </div>
-        <div class="hero-chip">
-            <div style="font-size: 1.75rem; margin-bottom: 0.75rem;">🧪</div>
-            <b>Stress Test</b><br/>Run deep sensitivity diagnostics to uncover financial exposures and risks.
-        </div>
-        <div class="hero-chip">
-            <div style="font-size: 1.75rem; margin-bottom: 0.75rem;">📈</div>
-            <b>Executive Insights</b><br/>Export automated PDF briefs with prioritized, actionable savings roadmaps.
-        </div>
-      </div>
     </div>
     """, unsafe_allow_html=True)
 
@@ -552,7 +538,7 @@ def render_sensitivity_section(cfg, result):
     ranked = full_analysis["ranked_parameters"]
     tornado_data = full_analysis["tornado_data"]
 
-    st.subheader("📊 Parameter Sensitivity Ranking")
+    st.subheader("Parameter Sensitivity Ranking")
     summary_df = pd.DataFrame([
         {
             "Rank": r.sensitivity_rank,
@@ -570,7 +556,7 @@ def render_sensitivity_section(cfg, result):
     ])
     st.dataframe(summary_df, hide_index=True, use_container_width=True)
 
-    with st.expander("ℹ️ How to Read Elasticity"):
+    with st.expander("How to Read Elasticity"):
         st.markdown("""
         **EOQ elasticity** shows how EOQ changes when a parameter changes.  
         **Cost elasticity** shows how total annual cost changes when a parameter changes.  
@@ -613,13 +599,13 @@ def render_sensitivity_section(cfg, result):
         with col1:
             hc_comp = full_analysis.get("holding_components", {})
             if hc_comp:
-                st.subheader("🏪 Holding Cost Component Sensitivity")
+                st.subheader("Holding Cost Component Sensitivity")
                 st.plotly_chart(SensitivityVisualizer.plot_component_sensitivity(
                     hc_comp, "Holding Cost", result.item_name), use_container_width=True)
         with col2:
             oc_comp = full_analysis.get("ordering_components", {})
             if oc_comp:
-                st.subheader("🚚 Ordering Cost Component Sensitivity")
+                st.subheader("Ordering Cost Component Sensitivity")
                 st.plotly_chart(SensitivityVisualizer.plot_component_sensitivity(
                     oc_comp, "Ordering Cost", result.item_name), use_container_width=True)
 
@@ -707,14 +693,14 @@ def render_optimization_section(cfg, result):
             }
             for s in suggestions
         ])
-        st.download_button("📄 Download Optimization Report (CSV)", report_df.to_csv(
+        st.download_button("Download Optimization Report (CSV)", report_df.to_csv(
             index=False).encode("utf-8"), f"optimization_report_{result.item_id}.csv", "text/csv")
 
 
 def render_pdf_download(results, summary_df):
     section_header("Report studio", "Executive PDF export",
                    "Generate a polished PDF packet with all model outputs, charts, recommendations, and appendices.")
-    with st.expander("⚙️ Report Settings", expanded=True):
+    with st.expander("Report Settings", expanded=True):
         col1, col2 = st.columns(2)
         with col1:
             company = st.text_input("Company Name", "ACME Corporation")
@@ -731,7 +717,7 @@ def render_pdf_download(results, summary_df):
                 "Plotly/Kaleido image export so charts are faster without dropping chart count or DPI."
             ),
         )
-    if st.button("🖨️ Generate PDF Report", type="primary"):
+    if st.button("Generate PDF Report", type="primary"):
         from reportlab.lib.pagesizes import A4, letter
         page_size = A4 if page_size_opt == "A4" else letter
         spinner_text = "Generating charts and building PDF..." if include_charts else "Building PDF..."
@@ -757,7 +743,7 @@ def render_pdf_download(results, summary_df):
                 st.success(
                     f"Report generated successfully ({len(pdf_bytes)/1024:.0f} KB).")
                 st.download_button(
-                    label="⬇️ Download PDF Report",
+                    label="Download PDF Report",
                     data=pdf_bytes,
                     file_name=f"EOQ_Report_{datetime.date.today().strftime('%Y%m%d')}.pdf",
                     mime="application/pdf",
@@ -815,7 +801,7 @@ def render_full_results(results):
             l=20, r=20, t=60, b=20))
         st.plotly_chart(fig2, use_container_width=True)
 
-    st.download_button("⬇️ Download Results CSV", summary_df.to_csv(
+    st.download_button("Download Results CSV", summary_df.to_csv(
         index=False).encode("utf-8"), "eoq_results.csv", "text/csv")
 
     section_header("Deep dive", "Item diagnostics",
@@ -839,7 +825,7 @@ def render_full_results(results):
 inject_design_system()
 hero()
 
-main_tabs = st.tabs(["⚙️ Configuration", "📊 Dashboard & Results", "ℹ️ About / Help"])
+main_tabs = st.tabs(["Configuration", "Dashboard & Results", "About / Help"])
 
 with main_tabs[0]:
     section_header("Portfolio setup", "Configuration", "Select the number of items and configure demand and cost parameters.")
