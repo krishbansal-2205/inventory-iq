@@ -106,6 +106,86 @@ DESIGN_CSS = """
 .stTabs [aria-selected="true"] { background: #0f172a !important; color: white !important; }
 hr { border-color: rgba(15,23,42,0.08); }
 @media (max-width: 900px) { .hero-grid { grid-template-columns: 1fr; } .hero-shell { padding: 24px; } }
+
+/* ── Contrast hardening for Streamlit widgets and generated content ───────── */
+.stApp, .main, .block-container, [data-testid="stAppViewContainer"] { color: var(--ink) !important; }
+.block-container .stMarkdown,
+.block-container .stMarkdown p,
+.block-container [data-testid="stMarkdownContainer"],
+.block-container [data-testid="stMarkdownContainer"] p { color: var(--ink) !important; }
+.block-container [data-testid="stWidgetLabel"] p,
+.block-container [data-testid="stWidgetLabel"] label,
+.block-container [data-testid="stWidgetLabel"] span { color: #0f172a !important; font-weight: 750; }
+.block-container input,
+.block-container textarea,
+.block-container [contenteditable="true"],
+.block-container [data-baseweb="input"] input,
+.block-container [data-baseweb="textarea"] textarea {
+  color: #0f172a !important; -webkit-text-fill-color: #0f172a !important; background-color: rgba(255,255,255,0.96) !important;
+}
+.block-container input::placeholder,
+.block-container textarea::placeholder { color: #64748b !important; -webkit-text-fill-color: #64748b !important; }
+.block-container [data-baseweb="select"] > div,
+.block-container [data-baseweb="select"] span,
+.block-container [data-baseweb="select"] input,
+.block-container [data-baseweb="popover"] *,
+.block-container [role="listbox"] *,
+.block-container [role="option"] * { color: #0f172a !important; -webkit-text-fill-color: #0f172a !important; }
+.block-container [data-baseweb="radio"] label,
+.block-container [data-baseweb="radio"] div,
+.block-container [data-baseweb="checkbox"] label,
+.block-container [data-baseweb="checkbox"] div { color: #0f172a !important; }
+.stTabs [data-baseweb="tab"] p,
+.stTabs [data-baseweb="tab"] span { color: #334155 !important; }
+.stTabs [aria-selected="true"] p,
+.stTabs [aria-selected="true"] span,
+.stTabs [aria-selected="true"] div { color: #ffffff !important; }
+[data-testid="stMetricLabel"] p,
+[data-testid="stMetricLabel"] label,
+[data-testid="stMetricLabel"] span { color: #64748b !important; }
+[data-testid="stMetricValue"] div,
+[data-testid="stMetricValue"] span { color: #0f172a !important; }
+[data-testid="stMetricDelta"] div,
+[data-testid="stMetricDelta"] span { color: #0f766e !important; }
+.stAlert,
+.stAlert p,
+.stAlert div,
+.stAlert span { color: #0f172a !important; }
+[data-testid="stDataFrame"] *,
+[data-testid="stTable"] * { color: #0f172a !important; }
+.hero-title { color: #ffffff !important; }
+.hero-copy { color: #cbd5e1 !important; }
+.hero-kicker { color: #bfdbfe !important; }
+.hero-chip { color: #e2e8f0 !important; }
+.hero-chip b { color: #ffffff !important; }
+.metric-label { color: #64748b !important; }
+.metric-value { color: #0f172a !important; }
+.metric-detail { color: #475569 !important; }
+.result-title { color: #0f172a !important; }
+.result-meta { color: #64748b !important; }
+.badge { color: #1d4ed8 !important; }
+.badge.teal { color: #0f766e !important; }
+.badge.purple { color: #6d28d9 !important; }
+
+/* Sidebar keeps its premium dark look, while white input boxes remain readable. */
+[data-testid="stSidebar"] .stMarkdown,
+[data-testid="stSidebar"] .stMarkdown p,
+[data-testid="stSidebar"] [data-testid="stMarkdownContainer"],
+[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p,
+[data-testid="stSidebar"] [data-testid="stWidgetLabel"] p,
+[data-testid="stSidebar"] label,
+[data-testid="stSidebar"] .workflow-step,
+[data-testid="stSidebar"] .workflow-step * { color: rgba(255,255,255,0.92) !important; }
+[data-testid="stSidebar"] input,
+[data-testid="stSidebar"] textarea,
+[data-testid="stSidebar"] [data-baseweb="input"] input,
+[data-testid="stSidebar"] [data-baseweb="select"] > div,
+[data-testid="stSidebar"] [data-baseweb="select"] span,
+[data-testid="stSidebar"] [data-baseweb="select"] input {
+  color: #0f172a !important; -webkit-text-fill-color: #0f172a !important; background-color: #ffffff !important;
+}
+[data-testid="stSidebar"] [data-baseweb="slider"] *,
+[data-testid="stSidebar"] [role="slider"] * { color: rgba(255,255,255,0.92) !important; }
 </style>
 """
 
