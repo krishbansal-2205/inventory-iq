@@ -51,141 +51,66 @@ def annual_cost_keys(cost_breakdown: dict):
 DESIGN_CSS = """
 <style>
 :root {
-  --ink: #0f172a;
-  --muted: #64748b;
-  --panel: rgba(255, 255, 255, 0.86);
-  --line: rgba(15, 23, 42, 0.10);
+  --ink: #111827;
+  --muted: #4b5563;
+  --panel: #ffffff;
+  --line: #e5e7eb;
   --brand: #2563eb;
-  --brand-2: #7c3aed;
-  --accent: #14b8a6;
-  --shadow: 0 20px 60px rgba(15, 23, 42, 0.10);
-  --shadow-soft: 0 10px 28px rgba(15, 23, 42, 0.08);
+  --accent: #4f46e5;
+  --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-soft: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
 }
 .stApp {
-  background:
-    radial-gradient(circle at 10% 0%, rgba(37, 99, 235, 0.18), transparent 30%),
-    radial-gradient(circle at 92% 8%, rgba(20, 184, 166, 0.16), transparent 32%),
-    linear-gradient(180deg, #f8fafc 0%, #eef2ff 42%, #f8fafc 100%);
-  color: var(--ink);
+  background-color: #f3f4f6;
+  color: var(--ink) !important;
 }
-.block-container { padding-top: 1.4rem; padding-bottom: 5rem; max-width: 1450px; }
-[data-testid="stSidebar"] { background: linear-gradient(180deg, #0f172a 0%, #111827 52%, #172554 100%); border-right: 1px solid rgba(255,255,255,0.08); }
-[data-testid="stSidebar"] * { color: rgba(255,255,255,0.92) !important; }
-.hero-shell { position: relative; overflow: hidden; padding: 30px 34px; border-radius: 30px; background: linear-gradient(135deg, rgba(15, 23, 42, 0.96), rgba(30, 41, 59, 0.92)); box-shadow: var(--shadow); border: 1px solid rgba(255,255,255,0.16); margin-bottom: 1.3rem; }
-.hero-shell:after { content: ""; position: absolute; right: -80px; top: -120px; width: 360px; height: 360px; border-radius: 50%; background: linear-gradient(135deg, rgba(37,99,235,0.42), rgba(20,184,166,0.28)); filter: blur(4px); }
-.hero-kicker { position: relative; z-index: 2; display: inline-flex; gap: 10px; align-items: center; padding: 7px 12px; border-radius: 999px; background: rgba(255, 255, 255, 0.10); border: 1px solid rgba(255, 255, 255, 0.18); color: #bfdbfe; font-size: 0.78rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; }
-.hero-title { position: relative; z-index: 2; margin: 14px 0 8px 0; font-size: clamp(2.1rem, 4vw, 4.1rem); line-height: 0.98; color: white; letter-spacing: -0.055em; font-weight: 900; }
-.hero-copy { position: relative; z-index: 2; max-width: 780px; color: #cbd5e1; font-size: 1.04rem; line-height: 1.65; margin-bottom: 0; }
-.hero-grid { position: relative; z-index: 2; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 22px; max-width: 840px; }
-.hero-chip { padding: 13px 15px; border-radius: 18px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.14); color: #e2e8f0; font-size: 0.88rem; }
-.hero-chip b { color: #fff; display: block; margin-bottom: 2px; }
-.section-kicker { display: inline-flex; align-items: center; gap: 9px; color: var(--brand); font-weight: 900; font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; margin-top: 0.45rem; }
-.section-title { font-size: 1.55rem; font-weight: 900; letter-spacing: -0.04em; color: var(--ink); margin: 0.15rem 0 0.2rem; }
-.section-copy { color: var(--muted); font-size: 0.95rem; margin: 0 0 0.9rem; }
-.metric-card { border-radius: 22px; padding: 18px 18px 16px; background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(248,250,252,0.92)); border: 1px solid rgba(15,23,42,0.08); box-shadow: 0 12px 30px rgba(15,23,42,0.07); min-height: 118px; }
-.metric-label { color: var(--muted); font-weight: 800; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.07em; }
-.metric-value { margin-top: 8px; color: var(--ink); font-weight: 900; font-size: 1.7rem; letter-spacing: -0.045em; line-height: 1.05; }
-.metric-detail { margin-top: 8px; color: #475569; font-size: 0.86rem; }
-.result-banner { padding: 20px 22px; border-radius: 24px; background: linear-gradient(135deg, rgba(37,99,235,0.12), rgba(20,184,166,0.10)); border: 1px solid rgba(37,99,235,0.14); margin: 1.1rem 0 0.8rem; }
-.result-title { color: var(--ink); font-size: 1.35rem; font-weight: 900; letter-spacing: -0.035em; margin: 0; }
-.result-meta { color: var(--muted); font-size: 0.9rem; margin-top: 5px; }
-.badge { display: inline-flex; align-items: center; padding: 6px 11px; border-radius: 999px; font-size: 0.76rem; font-weight: 900; letter-spacing: 0.04em; text-transform: uppercase; background: rgba(37,99,235,0.10); color: #1d4ed8; border: 1px solid rgba(37,99,235,0.16); }
-.badge.teal { background: rgba(20,184,166,0.12); color: #0f766e; border-color: rgba(20,184,166,0.18); }
-.badge.purple { background: rgba(124,58,237,0.11); color: #6d28d9; border-color: rgba(124,58,237,0.16); }
-.sidebar-brand { padding: 20px 8px 16px; border-bottom: 1px solid rgba(255,255,255,0.12); margin-bottom: 18px; }
-.sidebar-brand h2 { color: #fff !important; margin: 0; font-size: 1.25rem; letter-spacing: -0.03em; }
-.sidebar-brand p { color: rgba(226,232,240,0.72) !important; font-size: 0.82rem; line-height: 1.45; margin-top: 6px; }
-.workflow-step { padding: 11px 12px; border-radius: 16px; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.10); margin: 8px 0; font-size: 0.86rem; }
-[data-testid="stMetric"] { background: rgba(255,255,255,0.70); border: 1px solid rgba(15,23,42,0.08); padding: 14px 16px; border-radius: 18px; box-shadow: 0 8px 22px rgba(15,23,42,0.06); }
-[data-testid="stMetricLabel"] p { font-size: 0.78rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; font-weight: 800; }
-[data-testid="stMetricValue"] div { color: var(--ink); font-weight: 900; letter-spacing: -0.04em; }
-.stButton > button, .stDownloadButton > button { border: none !important; border-radius: 999px !important; padding: 0.72rem 1.2rem !important; background: linear-gradient(135deg, #2563eb, #14b8a6) !important; color: white !important; font-weight: 900 !important; box-shadow: 0 14px 30px rgba(37, 99, 235, 0.25) !important; }
-.stButton > button:hover, .stDownloadButton > button:hover { transform: translateY(-1px); box-shadow: 0 18px 36px rgba(37, 99, 235, 0.30) !important; }
-.stTabs [data-baseweb="tab-list"] { gap: 8px; background: rgba(255,255,255,0.58); padding: 8px; border-radius: 18px; border: 1px solid rgba(15,23,42,0.08); }
-.stTabs [data-baseweb="tab"] { border-radius: 13px; padding: 10px 16px; font-weight: 800; }
-.stTabs [aria-selected="true"] { background: #0f172a !important; color: white !important; }
-hr { border-color: rgba(15,23,42,0.08); }
-@media (max-width: 900px) { .hero-grid { grid-template-columns: 1fr; } .hero-shell { padding: 24px; } }
+.block-container { padding-top: 2rem; padding-bottom: 5rem; max-width: 1400px; }
 
-/* ── Contrast hardening for Streamlit widgets and generated content ───────── */
-.stApp, .main, .block-container, [data-testid="stAppViewContainer"] { color: var(--ink) !important; }
-.block-container .stMarkdown,
-.block-container .stMarkdown p,
-.block-container [data-testid="stMarkdownContainer"],
-.block-container [data-testid="stMarkdownContainer"] p { color: var(--ink) !important; }
-.block-container [data-testid="stWidgetLabel"] p,
-.block-container [data-testid="stWidgetLabel"] label,
-.block-container [data-testid="stWidgetLabel"] span { color: #0f172a !important; font-weight: 750; }
-.block-container input,
-.block-container textarea,
-.block-container [contenteditable="true"],
-.block-container [data-baseweb="input"] input,
-.block-container [data-baseweb="textarea"] textarea {
-  color: #0f172a !important; -webkit-text-fill-color: #0f172a !important; background-color: rgba(255,255,255,0.96) !important;
-}
-.block-container input::placeholder,
-.block-container textarea::placeholder { color: #64748b !important; -webkit-text-fill-color: #64748b !important; }
-.block-container [data-baseweb="select"] > div,
-.block-container [data-baseweb="select"] span,
-.block-container [data-baseweb="select"] input,
-.block-container [data-baseweb="popover"] *,
-.block-container [role="listbox"] *,
-.block-container [role="option"] * { color: #0f172a !important; -webkit-text-fill-color: #0f172a !important; }
-.block-container [data-baseweb="radio"] label,
-.block-container [data-baseweb="radio"] div,
-.block-container [data-baseweb="checkbox"] label,
-.block-container [data-baseweb="checkbox"] div { color: #0f172a !important; }
-.stTabs [data-baseweb="tab"] p,
-.stTabs [data-baseweb="tab"] span { color: #334155 !important; }
-.stTabs [aria-selected="true"] p,
-.stTabs [aria-selected="true"] span,
-.stTabs [aria-selected="true"] div { color: #ffffff !important; }
-[data-testid="stMetricLabel"] p,
-[data-testid="stMetricLabel"] label,
-[data-testid="stMetricLabel"] span { color: #64748b !important; }
-[data-testid="stMetricValue"] div,
-[data-testid="stMetricValue"] span { color: #0f172a !important; }
-[data-testid="stMetricDelta"] div,
-[data-testid="stMetricDelta"] span { color: #0f766e !important; }
-.stAlert,
-.stAlert p,
-.stAlert div,
-.stAlert span { color: #0f172a !important; }
-[data-testid="stDataFrame"] *,
-[data-testid="stTable"] * { color: #0f172a !important; }
-.hero-title { color: #ffffff !important; }
-.hero-copy { color: #cbd5e1 !important; }
-.hero-kicker { color: #bfdbfe !important; }
-.hero-chip { color: #e2e8f0 !important; }
-.hero-chip b { color: #ffffff !important; }
-.metric-label { color: #64748b !important; }
-.metric-value { color: #0f172a !important; }
-.metric-detail { color: #475569 !important; }
-.result-title { color: #0f172a !important; }
-.result-meta { color: #64748b !important; }
-.badge { color: #1d4ed8 !important; }
-.badge.teal { color: #0f766e !important; }
-.badge.purple { color: #6d28d9 !important; }
+/* Hero Section */
+.hero-shell { position: relative; overflow: hidden; padding: 3rem; border-radius: 1.25rem; background: linear-gradient(135deg, #0f172a, #1e3a8a, #312e81); box-shadow: var(--shadow); margin-bottom: 2rem; color: white; }
+.hero-kicker { display: inline-flex; gap: 8px; align-items: center; padding: 0.35rem 0.85rem; border-radius: 999px; background: rgba(255, 255, 255, 0.15); font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #bae6fd; border: 1px solid rgba(255,255,255,0.2); }
+.hero-title { margin: 1.25rem 0 0.75rem 0; font-size: 3rem; font-weight: 900; line-height: 1.15; letter-spacing: -0.03em; color: #ffffff; }
+.hero-copy { font-size: 1.15rem; color: #e2e8f0; max-width: 50rem; line-height: 1.6; margin-bottom: 0; font-weight: 400; }
+.hero-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; margin-top: 2.5rem; }
+.hero-chip { padding: 1.5rem; border-radius: 1rem; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); font-size: 0.9rem; color: #cbd5e1; backdrop-filter: blur(10px); }
+.hero-chip b { color: white; display: block; margin-bottom: 0.35rem; font-size: 1.1rem; font-weight: 700; }
 
-/* Sidebar keeps its premium dark look, while white input boxes remain readable. */
-[data-testid="stSidebar"] .stMarkdown,
-[data-testid="stSidebar"] .stMarkdown p,
-[data-testid="stSidebar"] [data-testid="stMarkdownContainer"],
-[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p,
-[data-testid="stSidebar"] [data-testid="stWidgetLabel"] p,
-[data-testid="stSidebar"] label,
-[data-testid="stSidebar"] .workflow-step,
-[data-testid="stSidebar"] .workflow-step * { color: rgba(255,255,255,0.92) !important; }
-[data-testid="stSidebar"] input,
-[data-testid="stSidebar"] textarea,
-[data-testid="stSidebar"] [data-baseweb="input"] input,
-[data-testid="stSidebar"] [data-baseweb="select"] > div,
-[data-testid="stSidebar"] [data-baseweb="select"] span,
-[data-testid="stSidebar"] [data-baseweb="select"] input {
-  color: #0f172a !important; -webkit-text-fill-color: #0f172a !important; background-color: #ffffff !important;
-}
-[data-testid="stSidebar"] [data-baseweb="slider"] *,
-[data-testid="stSidebar"] [role="slider"] * { color: rgba(255,255,255,0.92) !important; }
+/* Sections */
+.section-kicker { color: var(--brand); font-weight: 800; font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.05em; }
+.section-title { font-size: 1.75rem; font-weight: 800; color: var(--ink); margin: 0.25rem 0; letter-spacing: -0.02em; }
+.section-copy { color: var(--muted); font-size: 1.05rem; margin-bottom: 1.5rem; }
+
+/* Cards & Metrics */
+.metric-card { background: var(--panel); border: 1px solid var(--line); border-radius: 1rem; padding: 1.5rem; box-shadow: var(--shadow-soft); }
+.metric-label { color: #6b7280; font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+.metric-value { font-size: 2rem; font-weight: 800; color: var(--ink); margin-top: 0.5rem; line-height: 1.1; }
+.metric-detail { color: #4b5563; font-size: 0.9rem; margin-top: 0.5rem; }
+.result-banner { background: white; border: 1px solid var(--line); border-radius: 1rem; padding: 1.5rem; margin: 1.5rem 0; box-shadow: var(--shadow-soft); border-left: 4px solid var(--brand); }
+.result-title { font-size: 1.35rem; font-weight: 800; color: var(--ink); margin: 0; }
+.result-meta { color: #4b5563; font-size: 0.95rem; margin-top: 0.35rem; }
+
+/* Badges */
+.badge { display: inline-flex; align-items: center; padding: 0.3rem 0.85rem; border-radius: 999px; font-size: 0.75rem; font-weight: 700; background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; text-transform: uppercase; letter-spacing: 0.03em; }
+.badge.teal { background: #f0fdfa; color: #0f766e; border-color: #ccfbf1; }
+.badge.purple { background: #faf5ff; color: #6b21a8; border-color: #e9d5ff; }
+
+/* Streamlit Override: Contrast & Visibility */
+.stMarkdown, .stMarkdown p, [data-testid="stMarkdownContainer"] p { color: var(--ink) !important; }
+[data-testid="stWidgetLabel"] p, [data-testid="stWidgetLabel"] label { color: #1f2937 !important; font-weight: 600 !important; font-size: 0.95rem !important; }
+input, textarea, [data-baseweb="input"] input { color: #111827 !important; background-color: #ffffff !important; -webkit-text-fill-color: #111827 !important; }
+[data-baseweb="select"] > div, [data-baseweb="select"] span { color: #111827 !important; background-color: #ffffff !important; }
+[data-baseweb="radio"] label, [data-baseweb="checkbox"] label { color: #1f2937 !important; font-weight: 500 !important; }
+.stTabs [data-baseweb="tab-list"] { background: white; border: 1px solid var(--line); border-radius: 0.75rem; padding: 0.35rem; box-shadow: var(--shadow-soft); gap: 6px; }
+.stTabs [data-baseweb="tab"] { border-radius: 0.5rem; padding: 0.5rem 1.25rem; font-weight: 600; color: #6b7280; }
+.stTabs [data-baseweb="tab"] p { color: #6b7280 !important; font-size: 1rem !important; font-weight: 600 !important; }
+.stTabs [aria-selected="true"] { background: #f3f4f6 !important; box-shadow: var(--shadow-soft); border: 1px solid var(--line) !important; }
+.stTabs [aria-selected="true"] p { color: #111827 !important; }
+[data-testid="stMetricLabel"] p { color: #6b7280 !important; font-weight: 700 !important; font-size: 0.85rem !important; text-transform: uppercase !important; letter-spacing: 0.05em !important; }
+[data-testid="stMetricValue"] div { color: #111827 !important; font-weight: 800 !important; }
+[data-testid="stMetricDelta"] div { font-weight: 600 !important; }
+.stButton > button, .stDownloadButton > button { background: var(--brand) !important; color: white !important; border: none !important; border-radius: 0.5rem !important; padding: 0.6rem 1.25rem !important; font-weight: 600 !important; box-shadow: 0 4px 6px rgba(37, 99, 235, 0.2) !important; transition: all 0.2s; }
+.stButton > button:hover, .stDownloadButton > button:hover { background: #1d4ed8 !important; transform: translateY(-1px); box-shadow: 0 6px 8px rgba(37, 99, 235, 0.3) !important; }
+hr { border-color: var(--line) !important; }
 </style>
 """
 
@@ -197,13 +122,22 @@ def inject_design_system():
 def hero():
     st.markdown("""
     <div class="hero-shell">
-      <div class="hero-kicker">Inventory Intelligence Suite</div>
-      <div class="hero-title">EOQ Command Center</div>
-      <p class="hero-copy">A boardroom-grade workspace for order quantity decisions, cost architecture, sensitivity diagnostics, and action-ready inventory recommendations.</p>
+      <div class="hero-kicker">✦ Multi-Model Inventory Optimization</div>
+      <div class="hero-title">Supply Chain <br/>Command Center</div>
+      <p class="hero-copy">A comprehensive workspace for evaluating Economic Order Quantity (EOQ), conducting sensitivity analysis, and generating actionable procurement strategies across your entire product portfolio.</p>
       <div class="hero-grid">
-        <div class="hero-chip"><b>01 · Configure</b> Build item-level demand and cost architecture.</div>
-        <div class="hero-chip"><b>02 · Diagnose</b> Compare EOQ, sensitivity, and scenario behavior.</div>
-        <div class="hero-chip"><b>03 · Act</b> Export recommendations and executive PDF reports.</div>
+        <div class="hero-chip">
+            <div style="font-size: 1.75rem; margin-bottom: 0.75rem;">⚙️</div>
+            <b>Model Portfolio</b><br/>Configure parameters for Classic EOQ, POQ, and Stochastic inventory models.
+        </div>
+        <div class="hero-chip">
+            <div style="font-size: 1.75rem; margin-bottom: 0.75rem;">🧪</div>
+            <b>Stress Test</b><br/>Run deep sensitivity diagnostics to uncover financial exposures and risks.
+        </div>
+        <div class="hero-chip">
+            <div style="font-size: 1.75rem; margin-bottom: 0.75rem;">📈</div>
+            <b>Executive Insights</b><br/>Export automated PDF briefs with prioritized, actionable savings roadmaps.
+        </div>
       </div>
     </div>
     """, unsafe_allow_html=True)
@@ -905,115 +839,125 @@ def render_full_results(results):
 inject_design_system()
 hero()
 
-with st.sidebar:
-    st.markdown("""
-    <div class="sidebar-brand">
-      <h2>Inventory Studio</h2>
-      <p>Configure models, run diagnostics, and export decision-ready reports.</p>
-    </div>
-    <div class="workflow-step"><b>1</b> · Select portfolio size</div>
-    <div class="workflow-step"><b>2</b> · Configure demand + costs</div>
-    <div class="workflow-step"><b>3</b> · Run EOQ analysis</div>
-    """, unsafe_allow_html=True)
+main_tabs = st.tabs(["⚙️ Configuration", "📊 Dashboard & Results", "ℹ️ About / Help"])
+
+with main_tabs[0]:
+    section_header("Portfolio setup", "Configuration", "Select the number of items and configure demand and cost parameters.")
     num_items = st.slider("Portfolio items", 1, 8, 2)
 
-all_items_config = []
-tabs = st.tabs([f"Item {i + 1}" for i in range(num_items)])
+    all_items_config = []
+    item_tabs = st.tabs([f"Item {i + 1}" for i in range(num_items)])
 
-for i, tab in enumerate(tabs):
-    with tab:
-        section_header(
-            "Configuration", f"Item {i + 1}", "Define item identity, demand behavior, service targets, and cost architecture.")
-        col1, col2 = st.columns(2)
-        with col1:
-            item_id = st.text_input(
-                "Item ID", f"SKU{i + 1:03d}", key=f"id_{i}")
-            item_name = st.text_input(
-                "Item Name", f"Item {i + 1}", key=f"nm_{i}")
-            demand = st.number_input(
-                "Annual Demand (units)", 1, 500000, 5000, key=f"dm_{i}")
-            lead_time = st.number_input(
-                "Lead Time (days)", 0, 365, 7, key=f"lt_{i}")
-        with col2:
-            item_type = st.selectbox("Item Type", [
-                                     "Purchased (Classic EOQ)", "Manufactured (POQ)", "Uncertain Demand (Stochastic)"], key=f"type_{i}")
-            demand_std = st.number_input(
-                "Demand Std Dev (daily)", 0.0, 1000.0, 0.0, key=f"std_{i}")
-            service_level = st.slider(
-                "Service Level", 0.80, 0.999, 0.95, key=f"sl_{i}")
-            stockout_cost = st.number_input(
-                "Stockout Cost ($/unit)", 0.0, 1000.0, 0.0, key=f"soc_{i}")
-            current_order_qty = st.number_input(
-                "Current Order Qty (optional)", 0.0, 1000000.0, 0.0, key=f"coq_{i}")
+    for i, tab in enumerate(item_tabs):
+        with tab:
+            section_header(
+                "Configuration", f"Item {i + 1}", "Define item identity, demand behavior, service targets, and cost architecture.")
+            col1, col2 = st.columns(2)
+            with col1:
+                item_id = st.text_input(
+                    "Item ID", f"SKU{i + 1:03d}", key=f"id_{i}")
+                item_name = st.text_input(
+                    "Item Name", f"Item {i + 1}", key=f"nm_{i}")
+                demand = st.number_input(
+                    "Annual Demand (units)", 1, 500000, 5000, key=f"dm_{i}")
+                lead_time = st.number_input(
+                    "Lead Time (days)", 0, 365, 7, key=f"lt_{i}")
+            with col2:
+                item_type = st.selectbox("Item Type", [
+                                         "Purchased (Classic EOQ)", "Manufactured (POQ)", "Uncertain Demand (Stochastic)"], key=f"type_{i}")
+                demand_std = st.number_input(
+                    "Demand Std Dev (daily)", 0.0, 1000.0, 0.0, key=f"std_{i}")
+                service_level = st.slider(
+                    "Service Level", 0.80, 0.999, 0.95, key=f"sl_{i}")
+                stockout_cost = st.number_input(
+                    "Stockout Cost ($/unit)", 0.0, 1000.0, 0.0, key=f"soc_{i}")
+                current_order_qty = st.number_input(
+                    "Current Order Qty (optional)", 0.0, 1000000.0, 0.0, key=f"coq_{i}")
 
-        st.divider()
-        section_header("Model setup", "Cost model",
-                       "Complete the cost inputs for the selected model type.")
-        if item_type == "Purchased (Classic EOQ)":
-            unit_cost = st.number_input(
-                "Unit Purchase Cost ($)", 0.01, 10000.0, 10.0, key=f"uc_{i}")
-            col_hc, col_oc = st.columns(2)
-            with col_hc:
-                hc_components, hc_override = holding_cost_ui(
-                    f"item{i}", unit_cost)
-            with col_oc:
-                oc_components, oc_override = ordering_cost_ui(f"item{i}")
-            all_items_config.append({
-                "type": "classic", "id": item_id, "name": item_name, "demand": demand, "unit_cost": unit_cost,
-                "lead_time": lead_time, "demand_std": demand_std, "service_level": service_level,
-                "stockout_cost": stockout_cost, "current_order_qty": current_order_qty if current_order_qty > 0 else None,
-                "hc_components": hc_components, "hc_override": hc_override, "oc_components": oc_components, "oc_override": oc_override,
-            })
-        elif item_type == "Manufactured (POQ)":
-            production_rate = st.number_input(
-                "Production Rate (units/year)", int(demand) + 1, 10000000, int(demand) * 3, key=f"pr_{i}")
-            col_pc, col_hc = st.columns(2)
-            with col_pc:
-                pc_components, unit_cost, setup_cost = production_cost_ui(
-                    f"item{i}")
-            with col_hc:
-                hc_components, hc_override = holding_cost_ui(
-                    f"item{i}_h", unit_cost)
-            all_items_config.append({
-                "type": "poq", "id": item_id, "name": item_name, "demand": demand, "unit_cost": unit_cost,
-                "lead_time": lead_time, "production_rate": production_rate, "current_order_qty": current_order_qty if current_order_qty > 0 else None,
-                "hc_components": hc_components, "hc_override": hc_override, "pc_components": pc_components, "setup_cost": setup_cost,
-            })
-        else:
-            unit_cost = st.number_input(
-                "Unit Cost ($)", 0.01, 10000.0, 10.0, key=f"uc_s_{i}")
-            lead_time_std = st.number_input(
-                "Lead Time Std Dev (days)", 0.0, 30.0, 0.0, key=f"lts_{i}")
-            col_hc, col_oc = st.columns(2)
-            with col_hc:
-                hc_components, hc_override = holding_cost_ui(
-                    f"item{i}_s", unit_cost)
-            with col_oc:
-                oc_components, oc_override = ordering_cost_ui(f"item{i}_s")
-            all_items_config.append({
-                "type": "stochastic", "id": item_id, "name": item_name, "demand": demand, "unit_cost": unit_cost,
-                "lead_time": lead_time, "demand_std": demand_std,
-                "service_level": service_level, "stockout_cost": stockout_cost, "lead_time_std": lead_time_std,
-                "current_order_qty": current_order_qty if current_order_qty > 0 else None,
-                "hc_components": hc_components, "hc_override": hc_override, "oc_components": oc_components, "oc_override": oc_override,
-            })
+            st.divider()
+            section_header("Model setup", "Cost model",
+                           "Complete the cost inputs for the selected model type.")
+            if item_type == "Purchased (Classic EOQ)":
+                unit_cost = st.number_input(
+                    "Unit Purchase Cost ($)", 0.01, 10000.0, 10.0, key=f"uc_{i}")
+                col_hc, col_oc = st.columns(2)
+                with col_hc:
+                    hc_components, hc_override = holding_cost_ui(
+                        f"item{i}", unit_cost)
+                with col_oc:
+                    oc_components, oc_override = ordering_cost_ui(f"item{i}")
+                all_items_config.append({
+                    "type": "classic", "id": item_id, "name": item_name, "demand": demand, "unit_cost": unit_cost,
+                    "lead_time": lead_time, "demand_std": demand_std, "service_level": service_level,
+                    "stockout_cost": stockout_cost, "current_order_qty": current_order_qty if current_order_qty > 0 else None,
+                    "hc_components": hc_components, "hc_override": hc_override, "oc_components": oc_components, "oc_override": oc_override,
+                })
+            elif item_type == "Manufactured (POQ)":
+                production_rate = st.number_input(
+                    "Production Rate (units/year)", int(demand) + 1, 10000000, int(demand) * 3, key=f"pr_{i}")
+                col_pc, col_hc = st.columns(2)
+                with col_pc:
+                    pc_components, unit_cost, setup_cost = production_cost_ui(
+                        f"item{i}")
+                with col_hc:
+                    hc_components, hc_override = holding_cost_ui(
+                        f"item{i}_h", unit_cost)
+                all_items_config.append({
+                    "type": "poq", "id": item_id, "name": item_name, "demand": demand, "unit_cost": unit_cost,
+                    "lead_time": lead_time, "production_rate": production_rate, "current_order_qty": current_order_qty if current_order_qty > 0 else None,
+                    "hc_components": hc_components, "hc_override": hc_override, "pc_components": pc_components, "setup_cost": setup_cost,
+                })
+            else:
+                unit_cost = st.number_input(
+                    "Unit Cost ($)", 0.01, 10000.0, 10.0, key=f"uc_s_{i}")
+                lead_time_std = st.number_input(
+                    "Lead Time Std Dev (days)", 0.0, 30.0, 0.0, key=f"lts_{i}")
+                col_hc, col_oc = st.columns(2)
+                with col_hc:
+                    hc_components, hc_override = holding_cost_ui(
+                        f"item{i}_s", unit_cost)
+                with col_oc:
+                    oc_components, oc_override = ordering_cost_ui(f"item{i}_s")
+                all_items_config.append({
+                    "type": "stochastic", "id": item_id, "name": item_name, "demand": demand, "unit_cost": unit_cost,
+                    "lead_time": lead_time, "demand_std": demand_std,
+                    "service_level": service_level, "stockout_cost": stockout_cost, "lead_time_std": lead_time_std,
+                    "current_order_qty": current_order_qty if current_order_qty > 0 else None,
+                    "hc_components": hc_components, "hc_override": hc_override, "oc_components": oc_components, "oc_override": oc_override,
+                })
 
-section_header("Run", "Launch analysis",
-               "Calculate enhanced EOQ outputs and unlock diagnostics, savings recommendations, and PDF export.")
-if st.button("Run EOQ Analysis", type="primary"):
-    results, errors = [], []
-    for cfg in all_items_config:
-        try:
-            results.append((cfg, build_model(cfg).calculate()))
-        except Exception as exc:
-            errors.append(f"{cfg['name']}: {exc}")
-    if errors:
-        for err in errors:
-            st.error(err)
-    if results:
-        st.session_state["eoq_results"] = results
-        st.success(
-            f"Analysis completed for {len(results)} item(s). Scroll down for the executive dashboard.")
+    st.divider()
+    section_header("Run", "Launch analysis",
+                   "Calculate enhanced EOQ outputs and unlock diagnostics, savings recommendations, and PDF export.")
+    if st.button("Run EOQ Analysis", type="primary"):
+        results, errors = [], []
+        for cfg in all_items_config:
+            try:
+                results.append((cfg, build_model(cfg).calculate()))
+            except Exception as exc:
+                errors.append(f"{cfg['name']}: {exc}")
+        if errors:
+            for err in errors:
+                st.error(err)
+        if results:
+            st.session_state["eoq_results"] = results
+            st.success(
+                f"Analysis completed for {len(results)} item(s). Navigate to the Dashboard & Results tab to view insights.")
 
-if "eoq_results" in st.session_state:
-    render_full_results(st.session_state["eoq_results"])
+with main_tabs[1]:
+    if "eoq_results" in st.session_state:
+        render_full_results(st.session_state["eoq_results"])
+    else:
+        st.info("No results available. Please run the EOQ analysis in the Configuration tab first.")
+
+with main_tabs[2]:
+    st.markdown("""
+    ### Inventory Intelligence Suite
+    Configure models, run diagnostics, and export decision-ready reports.
+
+    **Workflow:**
+    1. **Configuration**: Define the number of portfolio items and specify demand, lead time, service targets, and cost components.
+    2. **Analysis**: Execute the EOQ models tailored for purchased, manufactured, or stochastic items.
+    3. **Dashboard & Results**: Analyze the interactive charts, perform sensitivity analysis, explore optimization opportunities, and export an executive PDF report.
+    """)
+
